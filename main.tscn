@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://db3cnc6nwy7qs"]
+
+[ext_resource type="Script" path="res://navigation.gd" id="1_ahjiu"]
+[ext_resource type="Texture2D" uid="uid://bok67yugbdmm5" path="res://icon.svg" id="1_u8ea4"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_vrfei"]
+outlines = Array[PackedVector2Array]([PackedVector2Array(1088, 64, 128, 64, 128, 576, 1088, 576)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[node name="Node2D" type="Node2D"]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_vrfei")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." node_paths=PackedStringArray("nav_agent", "nav_region")]
+position = Vector2(608, 344)
+script = ExtResource("1_ahjiu")
+nav_agent = NodePath("NavigationAgent2D")
+speed = 100.0
+nav_region = NodePath("../NavigationRegion2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("1_u8ea4")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="CharacterBody2D"]
+debug_enabled = true
+
+[connection signal="navigation_finished" from="CharacterBody2D/NavigationAgent2D" to="CharacterBody2D" method="_on_navigation_finished"]
+[connection signal="path_changed" from="CharacterBody2D/NavigationAgent2D" to="CharacterBody2D" method="_on_path_changed"]
